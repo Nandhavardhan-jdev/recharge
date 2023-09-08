@@ -106,13 +106,7 @@ public class UserServiceImpl implements UserService{
 				if (updatingAadhaarNumber.equals(existingAadhaarNumber)) {
 					if (userDto.getMobileNumber().matches("\\d+")) {
 						if (userDto.getMobileNumber().length() == 10) {
-							rechargeUser.setMobileNumber(userDto.getMobileNumber());
-							rechargeUser.setFirstName(userDto.getFirstName());
-							rechargeUser.setLastName(userDto.getLastName());
-							rechargeUser.setGender(userDto.getGender());
-							rechargeUser.setDob(userDto.getDob());
-							RechargeUser rechargeUser2 = userRepo.save(rechargeUser);
-							return userDto(rechargeUser2);
+							return updateUserDao(userDto, rechargeUser);
 						}else {
 							throw new RuntimeException("mobile number should be 10 digits");
 						}
@@ -128,14 +122,7 @@ public class UserServiceImpl implements UserService{
 							if (updatingAadhaarNumber.length() == 12) {
 								if (userDto.getMobileNumber().matches("\\d+")) {
 									if (userDto.getMobileNumber().length() == 10) {
-										rechargeUser.setAdhaarNumber(userDto.getAdhaarNumber());
-										rechargeUser.setMobileNumber(userDto.getMobileNumber());
-										rechargeUser.setFirstName(userDto.getFirstName());
-										rechargeUser.setLastName(userDto.getLastName());
-										rechargeUser.setGender(userDto.getGender());
-										rechargeUser.setDob(userDto.getDob());
-										RechargeUser rechargeUser3 = userRepo.save(rechargeUser);
-										return userDto(rechargeUser3);
+										return updateUserDao(userDto, rechargeUser);
 									}else {
 										throw new RuntimeException("mobile number should be 10 digits");
 									}
@@ -160,14 +147,7 @@ public class UserServiceImpl implements UserService{
 					if (updatingAadhaarNumber.equals(existingAadhaarNumber)) {
 						if (userDto.getMobileNumber().matches("\\d+")) {
 							if (userDto.getMobileNumber().length() == 10) {
-								rechargeUser.setEmailId(userDto.getEmailId());
-								rechargeUser.setMobileNumber(userDto.getMobileNumber());
-								rechargeUser.setFirstName(userDto.getFirstName());
-								rechargeUser.setLastName(userDto.getLastName());
-								rechargeUser.setGender(userDto.getGender());
-								rechargeUser.setDob(userDto.getDob());
-								RechargeUser rechargeUser3 = userRepo.save(rechargeUser);
-								return userDto(rechargeUser3);
+								return updateUserDao(userDto, rechargeUser);
 							}else {
 								throw new RuntimeException("mobile number should be 10 digits");
 							}
@@ -181,15 +161,7 @@ public class UserServiceImpl implements UserService{
 								if (updatingAadhaarNumber.length() == 12) {
 									if (userDto.getMobileNumber().matches("\\d+")) {
 										if (userDto.getMobileNumber().length() == 10) {
-											rechargeUser.setEmailId(userDto.getEmailId());
-											rechargeUser.setAdhaarNumber(userDto.getAdhaarNumber());
-											rechargeUser.setMobileNumber(userDto.getMobileNumber());
-											rechargeUser.setDob(userDto.getDob());
-											rechargeUser.setFirstName(userDto.getFirstName());
-											rechargeUser.setLastName(userDto.getLastName());
-											rechargeUser.setGender(userDto.getGender());
-											RechargeUser rechargeUser4 = userRepo.save(rechargeUser);
-											return userDto(rechargeUser4);
+											return updateUserDao(userDto, rechargeUser);
 										}else {
 											throw new RuntimeException("mobile numer should be 10 digits");
 										}
@@ -215,7 +187,19 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 	
-	private UserDto userDto(RechargeUser rechargeUser4) {
+	public UserDto updateUserDao(UserDto userDto, RechargeUser rechargeUser) {
+		rechargeUser.setEmailId(userDto.getEmailId());
+		rechargeUser.setAdhaarNumber(userDto.getAdhaarNumber());
+		rechargeUser.setMobileNumber(userDto.getMobileNumber());
+		rechargeUser.setDob(userDto.getDob());
+		rechargeUser.setFirstName(userDto.getFirstName());
+		rechargeUser.setLastName(userDto.getLastName());
+		rechargeUser.setGender(userDto.getGender());
+		RechargeUser rechargeUser4 = userRepo.save(rechargeUser);
+		return userDto(rechargeUser4);
+	}
+	
+	public UserDto userDto(RechargeUser rechargeUser4) {
 		UserDto userDto = new UserDto();
 		userDto.setUserId(rechargeUser4.getUserId());
 		userDto.setFirstName(rechargeUser4.getFirstName());
@@ -417,41 +401,15 @@ public class UserServiceImpl implements UserService{
 		RechargeUser rechargeUser = userRepo.findByUserId(userAccountDto.getUserId());
 		if (rechargeUser != null) {
 			if (userAccountDto.isDefaultNumber() == false) {
-				UserRechargeAccount userRechargeAccount = new UserRechargeAccount();
-				userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
-				userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
-				userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
-				userRechargeAccount.setNickName(userAccountDto.getNickName());
-				userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-				userRechargeAccount.setRechargeUser(rechargeUser);
-				userRechargeAccount.setStatus(1);
-				UserRechargeAccount userRechargeAccount2 = userAccountRepo.save(userRechargeAccount);
-				return accountDto(userRechargeAccount2);
+				return addAccountDao(userAccountDto, rechargeUser);
+				
 			}else {
 				UserRechargeAccount userRechargeAccount = userAccountRepo.findByDefaultNumberAndRechargeUserUserId(userAccountDto.isDefaultNumber(), userAccountDto.getUserId());
 				if (userRechargeAccount == null) {
-					UserRechargeAccount userRechargeAccount2 = new UserRechargeAccount();
-					userRechargeAccount2.setDefaultNumber(userAccountDto.isDefaultNumber());
-					userRechargeAccount2.setFavNumber(userAccountDto.isFavNumber());
-					userRechargeAccount2.setMobileNo(userAccountDto.getMobileNo());
-					userRechargeAccount2.setNickName(userAccountDto.getNickName());
-					userRechargeAccount2.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-					userRechargeAccount2.setRechargeUser(rechargeUser);
-					userRechargeAccount2.setStatus(1);
-					UserRechargeAccount userRechargeAccount3 = userAccountRepo.save(userRechargeAccount2);
-					return accountDto(userRechargeAccount3);
+					return addAccountDao(userAccountDto, rechargeUser);
 				}else {
 					userRechargeAccount.setDefaultNumber(false);
-					UserRechargeAccount userRechargeAccount2 = new UserRechargeAccount();
-					userRechargeAccount2.setDefaultNumber(userAccountDto.isDefaultNumber());
-					userRechargeAccount2.setFavNumber(userAccountDto.isFavNumber());
-					userRechargeAccount2.setMobileNo(userAccountDto.getMobileNo());
-					userRechargeAccount2.setNickName(userAccountDto.getNickName());
-					userRechargeAccount2.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-					userRechargeAccount2.setRechargeUser(rechargeUser);
-					userRechargeAccount2.setStatus(1);
-					UserRechargeAccount userRechargeAccount3 = userAccountRepo.save(userRechargeAccount2);
-					return accountDto(userRechargeAccount3);
+					return addAccountDao(userAccountDto, rechargeUser);
 				}
 			}
 		}else {
@@ -464,32 +422,14 @@ public class UserServiceImpl implements UserService{
 		UserRechargeAccount userRechargeAccount = userAccountRepo.findById(userAccountDto.getId());
 		if (userRechargeAccount != null) {
 			if (userAccountDto.isDefaultNumber() == false) {
-				userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
-				userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
-				userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
-				userRechargeAccount.setNickName(userAccountDto.getNickName());
-				userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-				UserRechargeAccount userRechargeAccount2 = userAccountRepo.save(userRechargeAccount);
-				return accountDto(userRechargeAccount2);
+				return updateAccountDao(userAccountDto, userRechargeAccount);
 			}else {
 				UserRechargeAccount userRechargeAccount2 = userAccountRepo.findByDefaultNumberAndRechargeUserUserId(userAccountDto.isDefaultNumber(),userAccountDto.getUserId());
 				if (userRechargeAccount2 == null) {
-					userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
-					userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
-					userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
-					userRechargeAccount.setNickName(userAccountDto.getNickName());
-					userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-					UserRechargeAccount userRechargeAccount3 = userAccountRepo.save(userRechargeAccount);
-					return accountDto(userRechargeAccount3);
+					return updateAccountDao(userAccountDto, userRechargeAccount);
 				}else {
 					userRechargeAccount2.setDefaultNumber(false);
-					userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
-					userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
-					userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
-					userRechargeAccount.setNickName(userAccountDto.getNickName());
-					userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
-					UserRechargeAccount userRechargeAccount3 = userAccountRepo.save(userRechargeAccount);
-					return accountDto(userRechargeAccount3);
+					return updateAccountDao(userAccountDto, userRechargeAccount);
 				}
 			}
 		}else {
@@ -582,6 +522,28 @@ public class UserServiceImpl implements UserService{
 		}
 	}
 
+	public UserAccountDto addAccountDao(UserAccountDto userAccountDto, RechargeUser rechargeUser) {
+		UserRechargeAccount userRechargeAccount = new UserRechargeAccount();
+		userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
+		userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
+		userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
+		userRechargeAccount.setNickName(userAccountDto.getNickName());
+		userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
+		userRechargeAccount.setRechargeUser(rechargeUser);
+		userRechargeAccount.setStatus(1);
+		UserRechargeAccount userRechargeAccount2 = userAccountRepo.save(userRechargeAccount);
+		return accountDto(userRechargeAccount2);
+	}
+	
+	public UserAccountDto updateAccountDao(UserAccountDto userAccountDto, UserRechargeAccount userRechargeAccount) {
+		userRechargeAccount.setDefaultNumber(userAccountDto.isDefaultNumber());
+		userRechargeAccount.setFavNumber(userAccountDto.isFavNumber());
+		userRechargeAccount.setMobileNo(userAccountDto.getMobileNo());
+		userRechargeAccount.setNickName(userAccountDto.getNickName());
+		userRechargeAccount.setTelecomOperatorName(userAccountDto.getTelecomOperatorName());
+		UserRechargeAccount userRechargeAccount2 = userAccountRepo.save(userRechargeAccount);
+		return accountDto(userRechargeAccount2);
+	}
 	
 	public UserAccountDto accountDto(UserRechargeAccount userRechargeAccount) {
 		UserAccountDto userAccountDto = new UserAccountDto();
