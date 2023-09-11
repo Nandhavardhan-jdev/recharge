@@ -291,7 +291,7 @@ public class VendorServiceImpl  implements VendorService{
 			}
 		}else {
 			throw new RuntimeException("plan id doesn't exists");
-		}
+		} 
 	}
 	
 	public RechargePlanDto updatePlanDao(RechargePlanDto rechargePlanDto, RechargePlan rechargePlan) {
