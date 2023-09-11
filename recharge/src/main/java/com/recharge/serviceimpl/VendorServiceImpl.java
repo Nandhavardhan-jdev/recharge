@@ -76,31 +76,11 @@ public class VendorServiceImpl  implements VendorService{
 		if(rechargeVendor!=null) {
 			if(rechargeVendor.getEmailId().equals(vendorDto.getEmailId())) {
 				if (vendorDto.getTelecomOperatorName().equalsIgnoreCase(rechargeVendor.getTelecomOperatorName())) {
-					rechargeVendor.setFirstName(vendorDto.getFirstName());
-					rechargeVendor.setLastName(vendorDto.getLastName());
-					rechargeVendor.setGender(vendorDto.getGender());
-					rechargeVendor.setAddressLine1(vendorDto.getAddressLine1());
-					rechargeVendor.setAddressLine2(vendorDto.getAddressLine2());
-					rechargeVendor.setDob(vendorDto.getDob());
-					rechargeVendor.setTelecomOperatorName(vendorDto.getTelecomOperatorName());
-					rechargeVendor.setEmailId(vendorDto.getEmailId());
-					RechargeVendor rechargeVendor2 = vendorRepo.save(rechargeVendor);
-					VendorDto vendorDto2 = vendorDto(rechargeVendor2);
-					return vendorDto2;
+					return updateVendorDao(vendorDto, rechargeVendor);
 				}else {
 					RechargeVendor rechargeVendor2 = vendorRepo.findByTelecomOperatorName(vendorDto.getTelecomOperatorName());
 					if (rechargeVendor2 == null ) {
-						rechargeVendor.setFirstName(vendorDto.getFirstName());
-						rechargeVendor.setLastName(vendorDto.getLastName());
-						rechargeVendor.setGender(vendorDto.getGender());
-						rechargeVendor.setAddressLine1(vendorDto.getAddressLine1());
-						rechargeVendor.setAddressLine2(vendorDto.getAddressLine2());
-						rechargeVendor.setDob(vendorDto.getDob());
-						rechargeVendor.setTelecomOperatorName(vendorDto.getTelecomOperatorName());
-						rechargeVendor.setEmailId(vendorDto.getEmailId());
-						RechargeVendor rechargeVendor3 = vendorRepo.save(rechargeVendor);
-						VendorDto vendorDto2 = vendorDto(rechargeVendor3);
-						return vendorDto2;
+						return updateVendorDao(vendorDto, rechargeVendor);
 					}else {
 						throw new RuntimeException("telecom operator name alreay exists");
 					}
@@ -111,31 +91,11 @@ public class VendorServiceImpl  implements VendorService{
 				RechargeVendor rechargeVendor2 = vendorRepo.findByEmailId(vendorDto.getEmailId());
 				if(rechargeVendor2==null) {
 					if (vendorDto.getTelecomOperatorName().equals(rechargeVendor.getTelecomOperatorName())) {
-						rechargeVendor.setFirstName(vendorDto.getFirstName());
-						rechargeVendor.setLastName(vendorDto.getLastName());
-						rechargeVendor.setGender(vendorDto.getGender());
-						rechargeVendor.setAddressLine1(vendorDto.getAddressLine1());
-						rechargeVendor.setAddressLine2(vendorDto.getAddressLine2());
-						rechargeVendor.setDob(vendorDto.getDob());
-						rechargeVendor.setTelecomOperatorName(vendorDto.getTelecomOperatorName());
-						rechargeVendor.setEmailId(vendorDto.getEmailId());
-						RechargeVendor rechargeVendor3 = vendorRepo.save(rechargeVendor);
-						VendorDto vendorDto2 = vendorDto(rechargeVendor3);
-						return vendorDto2;
+						return updateVendorDao(vendorDto, rechargeVendor);
 					}else {
 						RechargeVendor rechargeVendor3 = vendorRepo.findByTelecomOperatorName(vendorDto.getTelecomOperatorName());
 						if (rechargeVendor3 == null) {
-							rechargeVendor.setFirstName(vendorDto.getFirstName());
-							rechargeVendor.setLastName(vendorDto.getLastName());
-							rechargeVendor.setGender(vendorDto.getGender());
-							rechargeVendor.setAddressLine1(vendorDto.getAddressLine1());
-							rechargeVendor.setAddressLine2(vendorDto.getAddressLine2());
-							rechargeVendor.setDob(vendorDto.getDob());
-							rechargeVendor.setTelecomOperatorName(vendorDto.getTelecomOperatorName());
-							rechargeVendor.setEmailId(vendorDto.getEmailId());
-							RechargeVendor rechargeVendor4 = vendorRepo.save(rechargeVendor);
-							VendorDto vendorDto2 = vendorDto(rechargeVendor4);
-							return vendorDto2;
+							return updateVendorDao(vendorDto, rechargeVendor);
 						}else {
 							throw new RuntimeException("telecom operator name alreay exists");
 						}
@@ -149,6 +109,19 @@ public class VendorServiceImpl  implements VendorService{
 		}
 	}
 	
+	public VendorDto updateVendorDao(VendorDto vendorDto, RechargeVendor rechargeVendor) {
+		rechargeVendor.setFirstName(vendorDto.getFirstName());
+		rechargeVendor.setLastName(vendorDto.getLastName());
+		rechargeVendor.setGender(vendorDto.getGender());
+		rechargeVendor.setAddressLine1(vendorDto.getAddressLine1());
+		rechargeVendor.setAddressLine2(vendorDto.getAddressLine2());
+		rechargeVendor.setDob(vendorDto.getDob());
+		rechargeVendor.setTelecomOperatorName(vendorDto.getTelecomOperatorName());
+		rechargeVendor.setEmailId(vendorDto.getEmailId());
+		RechargeVendor rechargeVendor2 = vendorRepo.save(rechargeVendor);
+		return vendorDto(rechargeVendor2);
+	}
+
 	public VendorBalanceDto getVendorBalance(long id) {
 		RechargeVendor rechargeVendor = vendorRepo.findByVendorId(id);
 		if(rechargeVendor!=null) {
@@ -305,21 +278,13 @@ public class VendorServiceImpl  implements VendorService{
 		if(rechargePlan!=null) {
 			int comparasion = rechargePlan.getRechargeAmount().compareTo(rechargePlanDto.getRechargeAmount());
 			if(comparasion==0) {
-				rechargePlan.setRechargeAmount(rechargePlanDto.getRechargeAmount());
-				rechargePlan.setValidity(rechargePlanDto.getValidity());
-				rechargePlan.setDescription(rechargePlanDto.getDescription());
-				RechargePlan rechargePlan2 = rechargePlanRepo.save(rechargePlan);
-				return planDto(rechargePlan2);
+				return updatePlanDao(rechargePlanDto, rechargePlan);
 			}
 //			rechargeamount are not equal
 			else {
 				RechargePlan rechargePlan2 = rechargePlanRepo.findByRechargeAmountAndRechargeVendorVendorId(rechargePlanDto.getRechargeAmount(), rechargePlanDto.getVendorId());
 				if(rechargePlan2==null) {
-					rechargePlan.setRechargeAmount(rechargePlanDto.getRechargeAmount());
-					rechargePlan.setValidity(rechargePlanDto.getValidity());
-					rechargePlan.setDescription(rechargePlanDto.getDescription());
-					RechargePlan rechargePlan3 = rechargePlanRepo.save(rechargePlan);
-					return planDto(rechargePlan3);
+					return updatePlanDao(rechargePlanDto, rechargePlan);
 				}else {
 					throw new RuntimeException("recharge amount already exists");
 				}
@@ -327,6 +292,14 @@ public class VendorServiceImpl  implements VendorService{
 		}else {
 			throw new RuntimeException("plan id doesn't exists");
 		}
+	}
+	
+	public RechargePlanDto updatePlanDao(RechargePlanDto rechargePlanDto, RechargePlan rechargePlan) {
+		rechargePlan.setRechargeAmount(rechargePlanDto.getRechargeAmount());
+		rechargePlan.setValidity(rechargePlanDto.getValidity());
+		rechargePlan.setDescription(rechargePlanDto.getDescription());
+		RechargePlan rechargePlan2 = rechargePlanRepo.save(rechargePlan);
+		return planDto(rechargePlan2);
 	}
 	
 	private RechargePlanDto planDto(RechargePlan rechargePlan3) {
